@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "663133416037",
+    "firebase_url": "https://city-contributions.firebaseio.com",
+    "project_id": "city-contributions",
+    "storage_bucket": "city-contributions.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663133416037:android:676641516e7426bdcbf48c",
+        "android_client_info": {
+          "package_name": "com.gilbertohdz.todomap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663133416037-02kd10ldnj9t4r0krpctdtc4hghl3tr7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt0geLHhYk9i7ZFWeibmTI3Ikg791yAhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663133416037-02kd10ldnj9t4r0krpctdtc4hghl3tr7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:663133416037:android:ae3ef788c6a915f4cbf48c",
+        "android_client_info": {
+          "package_name": "dev.manitos.cityapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "663133416037-02kd10ldnj9t4r0krpctdtc4hghl3tr7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt0geLHhYk9i7ZFWeibmTI3Ikg791yAhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "663133416037-02kd10ldnj9t4r0krpctdtc4hghl3tr7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
