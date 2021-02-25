@@ -3,22 +3,30 @@ package com.gilbertohdz.todomap.locationreminders.savereminder.selectreminderloc
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import com.gilbertohdz.todomap.R
 import com.gilbertohdz.todomap.base.BaseFragment
 import com.gilbertohdz.todomap.databinding.FragmentSelectLocationBinding
 import com.gilbertohdz.todomap.locationreminders.savereminder.SaveReminderViewModel
 import com.gilbertohdz.todomap.utils.setDisplayHomeAsUpEnabled
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.android.ext.android.inject
 
-class SelectLocationFragment : BaseFragment() {
+class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
     private lateinit var binding: FragmentSelectLocationBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
@@ -30,6 +38,8 @@ class SelectLocationFragment : BaseFragment() {
         setDisplayHomeAsUpEnabled(true)
 
 //        TODO: add the map setup implementation
+        binding.selectLocationMapView.onCreate(savedInstanceState)
+        binding.selectLocationMapView.getMapAsync(this)
 //        TODO: zoom to the user location after taking his permission
 //        TODO: add style to the map
 //        TODO: put a marker to location that the user selected
@@ -39,6 +49,41 @@ class SelectLocationFragment : BaseFragment() {
         onLocationSelected()
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.selectLocationMapView.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.selectLocationMapView.onStop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.selectLocationMapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.selectLocationMapView.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.selectLocationMapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        binding.selectLocationMapView.onLowMemory()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        binding.selectLocationMapView.onSaveInstanceState(outState)
     }
 
     private fun onLocationSelected() {
@@ -69,5 +114,15 @@ class SelectLocationFragment : BaseFragment() {
         else -> super.onOptionsItemSelected(item)
     }
 
-
+    override fun onMapReady(googleMap: GoogleMap) {
+        val sydney = LatLng(-34.0, 151.0)
+        googleMap.apply {
+            addMarker(
+                MarkerOptions()
+                    .position(sydney)
+                    .title("Marker in Sydney")
+            )
+            moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        }
+    }
 }
