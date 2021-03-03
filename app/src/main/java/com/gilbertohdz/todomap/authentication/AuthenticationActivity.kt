@@ -12,6 +12,7 @@ import com.gilbertohdz.todomap.R
 import com.gilbertohdz.todomap.locationreminders.RemindersActivity
 import com.gilbertohdz.todomap.utils.Prefs
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_authentication.*
 
 /**
  * This class should be the starting point of the app, It asks the users to sign in / register, and redirects the
@@ -28,7 +29,9 @@ class AuthenticationActivity : AppCompatActivity() {
             // already signed in
             navigateToRemindersScreen()
         } else {
-            authSetup()
+            authLogin.setOnClickListener {
+                authSetup()
+            }
         }
 
         // TODO: a bonus is to customize the sign in flow to look nice using :
