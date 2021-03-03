@@ -22,7 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.gilbertohdz.todomap.locationreminders.ReminderDescriptionActivity"></activity>
+        <activity android:name="com.gilbertohdz.todomap.locationreminders.ReminderDescriptionActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -36,15 +36,14 @@
             android:value="${mapsApiKey}" />
 
         <activity android:name="com.gilbertohdz.todomap.authentication.AuthenticationActivity">
-        </activity>
-        <activity android:name="com.gilbertohdz.todomap.locationreminders.RemindersActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+        <activity android:name="com.gilbertohdz.todomap.locationreminders.RemindersActivity" />
+
         <receiver
             android:name="com.gilbertohdz.todomap.locationreminders.geofence.GeofenceBroadcastReceiver"
             android:enabled="true"
