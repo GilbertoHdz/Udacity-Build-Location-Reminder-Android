@@ -1,14 +1,17 @@
 package com.gilbertohdz.todomap.locationreminders.savereminder.selectreminderlocation
 
 
+import android.annotation.SuppressLint
+import android.location.Location
 import android.os.Bundle
 import android.view.*
-import androidx.core.os.bundleOf
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.gilbertohdz.todomap.R
 import com.gilbertohdz.todomap.base.BaseFragment
 import com.gilbertohdz.todomap.databinding.FragmentSelectLocationBinding
 import com.gilbertohdz.todomap.locationreminders.savereminder.SaveReminderViewModel
+import com.gilbertohdz.todomap.utils.LocationUtils
 import com.gilbertohdz.todomap.utils.setDisplayHomeAsUpEnabled
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -17,7 +20,10 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import org.koin.android.ext.android.inject
 
-class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
+class SelectLocationFragment : BaseFragment(),
+    OnMapReadyCallback,
+    GoogleMap.OnMyLocationButtonClickListener,
+    GoogleMap.OnMyLocationClickListener {
 
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
@@ -37,10 +43,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-//        TODO: add the map setup implementation
         binding.selectLocationMapView.onCreate(savedInstanceState)
         binding.selectLocationMapView.getMapAsync(this)
-//        TODO: zoom to the user location after taking his permission
 //        TODO: add style to the map
 //        TODO: put a marker to location that the user selected
 
@@ -114,15 +118,39 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
-        val sydney = LatLng(-34.0, 151.0)
+        defaultCenterLocation(googleMap)
+
+        if (!LocationUtils.isPermissionGranted(requireContext())) {
+            googleMap.isMyLocationEnabled = true
+            googleMap.setOnMyLocationButtonClickListener(this)
+            googleMap.setOnMyLocationClickListener(this)
+        } else {
+            LocationUtils.requestLocationPermission(requireActivity())
+        }
+    }
+
+    override fun onMyLocationButtonClick(): Boolean {
+        Toast.makeText(requireContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show()
+        // Return false so that we don't consume the event and the default behavior still occurs
+        // (the camera animates to the user's current position).
+        return false
+    }
+
+    override fun onMyLocationClick(location: Location) {
+        Toast.makeText(requireContext(), "Current location:\n$location", Toast.LENGTH_LONG).show()
+    }
+
+    private fun defaultCenterLocation(googleMap: GoogleMap) {
+        val mexicoCenter = LatLng(19.88734529086868, -99.11100515334736)
         googleMap.apply {
             addMarker(
                 MarkerOptions()
-                    .position(sydney)
-                    .title("Marker in Sydney")
+                    .position(mexicoCenter)
+                    .title("México")
             )
-            moveCamera(CameraUpdateFactory.newLatLng(sydney))
+            moveCamera(CameraUpdateFactory.newLatLng(mexicoCenter))
         }
     }
 }
