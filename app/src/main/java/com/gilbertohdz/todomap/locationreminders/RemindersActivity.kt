@@ -1,10 +1,13 @@
 package com.gilbertohdz.todomap.locationreminders
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import com.firebase.ui.auth.AuthUI
 import com.gilbertohdz.todomap.R
+import com.gilbertohdz.todomap.authentication.AuthenticationActivity
 import kotlinx.android.synthetic.main.activity_reminders.*
 
 /**
@@ -23,6 +26,19 @@ class RemindersActivity : AppCompatActivity() {
             android.R.id.home -> {
                 (nav_host_fragment as NavHostFragment).navController.popBackStack()
                 return true
+            }
+            R.id.logout -> {
+                AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener {
+                        startActivity(
+                            Intent(
+                                this@RemindersActivity,
+                                AuthenticationActivity::class.java
+                            )
+                        )
+                        finish()
+                    }
             }
         }
         return super.onOptionsItemSelected(item)

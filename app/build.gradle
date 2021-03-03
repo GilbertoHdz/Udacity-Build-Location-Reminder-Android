@@ -16,6 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
 
         // Set the properties within `local.properties` into a `Properties` class so that values
         // within `local.properties` (e.g. Maps API key) are accessible in this file.
@@ -77,6 +78,8 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$navigationVersion"
     implementation "androidx.test.espresso:espresso-idling-resource:$espressoVersion"
 
+    implementation 'com.android.support:multidex:1.0.3'
+
     //Room dependencies
     implementation "androidx.room:room-ktx:$roomVersion"
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -131,7 +134,8 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$playServicesVersion"
 
     // Firebase Auth
-    implementation "com.google.firebase:firebase-auth:$playServicesVersion"
+    //implementation "com.google.firebase:firebase-auth:$playServicesVersion"
+    implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
 
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
 }
