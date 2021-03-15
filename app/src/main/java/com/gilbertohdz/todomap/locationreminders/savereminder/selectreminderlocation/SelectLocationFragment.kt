@@ -24,11 +24,7 @@ import java.lang.Exception
 
 class SelectLocationFragment : BaseFragment(),
     OnMapReadyCallback,
-    GoogleMap.OnMyLocationButtonClickListener,
-    GoogleMap.OnMyLocationClickListener,
-    GoogleMap.OnMapClickListener,
-    GoogleMap.OnPoiClickListener,
-    GoogleMap.OnMarkerClickListener {
+    GoogleMap.OnPoiClickListener {
 
     //Use Koin to get the view model of the SaveReminder
     override val _viewModel: SaveReminderViewModel by inject()
@@ -53,10 +49,6 @@ class SelectLocationFragment : BaseFragment(),
 
         binding.selectLocationMapView.onCreate(savedInstanceState)
         binding.selectLocationMapView.getMapAsync(this)
-//        TODO: add style to the map
-//        TODO: put a marker to location that the user selected
-
-//        TODO: call this function after the user confirms on the selected location
         onLocationSelected()
 
         return binding.root
@@ -98,9 +90,6 @@ class SelectLocationFragment : BaseFragment(),
     }
 
     private fun onLocationSelected() {
-        //        TODO: When the user confirms on the selected location,
-        //         send back the selected location details to the view model
-        //         and navigate back to the previous fragment to save the reminder and add the geofence
         if (::mPointOfInterest.isInitialized) {
             _viewModel.reminderSelectedLocationStr.value = mPointOfInterest.name
             _viewModel.selectedPOI.value = mPointOfInterest
@@ -140,32 +129,11 @@ class SelectLocationFragment : BaseFragment(),
         if (!LocationUtils.isPermissionGranted(requireContext())) {
             setMapStyle(googleMap)
             googleMap.isMyLocationEnabled = true
-            googleMap.setOnMyLocationButtonClickListener(this)
-            googleMap.setOnMyLocationClickListener(this)
-            googleMap.setOnMapClickListener(this)
-            googleMap.setOnMarkerClickListener(this)
             googleMap.setOnPoiClickListener(this)
 
             saveSelectedLocation()
         } else {
             LocationUtils.requestLocationPermission(requireActivity())
-        }
-    }
-
-    override fun onMyLocationButtonClick(): Boolean {
-        Toast.makeText(requireContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show()
-        // Return false so that we don't consume the event and the default behavior still occurs
-        // (the camera animates to the user's current position).
-        return false
-    }
-
-    override fun onMyLocationClick(location: Location) {
-        Toast.makeText(requireContext(), "Location-click:\n$location", Toast.LENGTH_LONG).show()
-    }
-
-    override fun onMapClick(latLong: LatLng?) {
-        latLong?.let {
-            Toast.makeText(requireContext(), "Map-click: ${latLong.latitude}, ${latLong.longitude}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -186,13 +154,6 @@ class SelectLocationFragment : BaseFragment(),
             onLocationSelected()
             _viewModel.navigationCommand.postValue(NavigationCommand.Back)
         }
-    }
-
-    override fun onMarkerClick(marker: Marker?): Boolean {
-        marker?.let {
-            Toast.makeText(requireContext(), "Marker-click: ${marker.title}", Toast.LENGTH_SHORT).show()
-        }
-        return false
     }
 
     private fun setMapStyle(googleMap: GoogleMap) {
