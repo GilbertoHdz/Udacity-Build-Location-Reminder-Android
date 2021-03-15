@@ -95,6 +95,7 @@ class SelectLocationFragment : BaseFragment(),
             _viewModel.selectedPOI.value = mPointOfInterest
             _viewModel.latitude.value = mPointOfInterest.latLng.latitude
             _viewModel.longitude.value = mPointOfInterest.latLng.longitude
+            _viewModel.navigationCommand.postValue(NavigationCommand.Back)
         } else {
             _viewModel.showSnackBarInt.value = R.string.err_select_location
         }
@@ -105,17 +106,20 @@ class SelectLocationFragment : BaseFragment(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        // TODO: Change the map type based on the user's selection.
         R.id.normal_map -> {
+            mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
             true
         }
         R.id.hybrid_map -> {
+            mMap.mapType = GoogleMap.MAP_TYPE_HYBRID
             true
         }
         R.id.satellite_map -> {
+            mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
             true
         }
         R.id.terrain_map -> {
+            mMap.mapType = GoogleMap.MAP_TYPE_TERRAIN
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -152,7 +156,6 @@ class SelectLocationFragment : BaseFragment(),
     private fun saveSelectedLocation() {
         binding.selectLocationSaveAction.setOnClickListener {
             onLocationSelected()
-            _viewModel.navigationCommand.postValue(NavigationCommand.Back)
         }
     }
 
