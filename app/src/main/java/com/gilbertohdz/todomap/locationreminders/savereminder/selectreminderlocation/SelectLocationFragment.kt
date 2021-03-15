@@ -45,6 +45,13 @@ class SelectLocationFragment : BaseFragment(),
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
+
+//        DONE: add the map setup implementation
+//        DONE: zoom to the user location after taking his permission
+//        DONE: add style to the map
+//        DONE: put a marker to location that the user selected
+//        DONE: call this function after the user confirms on the selected location
+
         binding.selectLocationMapView.onCreate(savedInstanceState)
         binding.selectLocationMapView.getMapAsync(this)
         onLocationSelected()
@@ -88,6 +95,10 @@ class SelectLocationFragment : BaseFragment(),
     }
 
     private fun onLocationSelected() {
+        //        DONE: When the user confirms on the selected location,
+        //         send back the selected location details to the view model
+        //         and navigate back to the previous fragment to save the reminder and add the geofence
+
         if (::mPointOfInterest.isInitialized) {
             _viewModel.reminderSelectedLocationStr.value = mPointOfInterest.name
             _viewModel.selectedPOI.value = mPointOfInterest
@@ -104,6 +115,7 @@ class SelectLocationFragment : BaseFragment(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        // DONE: Change the map type based on the user's selection.
         R.id.normal_map -> {
             mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
             true
