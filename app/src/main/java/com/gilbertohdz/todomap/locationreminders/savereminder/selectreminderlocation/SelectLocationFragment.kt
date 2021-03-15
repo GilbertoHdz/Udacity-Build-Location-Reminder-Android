@@ -2,11 +2,9 @@ package com.gilbertohdz.todomap.locationreminders.savereminder.selectreminderloc
 
 
 import android.annotation.SuppressLint
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.gilbertohdz.todomap.R
 import com.gilbertohdz.todomap.base.BaseFragment
@@ -20,7 +18,6 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import org.koin.android.ext.android.inject
-import java.lang.Exception
 
 class SelectLocationFragment : BaseFragment(),
     OnMapReadyCallback,
@@ -32,6 +29,7 @@ class SelectLocationFragment : BaseFragment(),
 
     private lateinit var mPointOfInterest: PointOfInterest
     private lateinit var mMap: GoogleMap
+    private lateinit var mTempMarker: Marker
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -142,14 +140,18 @@ class SelectLocationFragment : BaseFragment(),
     }
 
     override fun onPoiClick(poi: PointOfInterest) {
-        val poiMarker = mMap.addMarker(
+        if (::mTempMarker.isInitialized) {
+            mTempMarker.remove()
+        }
+
+        mTempMarker = mMap.addMarker(
                 MarkerOptions()
                         .position(poi.latLng)
                         .title(poi.name)
         )
         val zoomLevel = 15f
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(poi.latLng, zoomLevel))
-        poiMarker.showInfoWindow()
+        mTempMarker.showInfoWindow()
         mPointOfInterest = poi
     }
 
