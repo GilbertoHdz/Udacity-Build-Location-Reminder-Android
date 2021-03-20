@@ -1,6 +1,7 @@
 package com.gilbertohdz.todomap.locationreminders.savereminder
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.maps.model.PointOfInterest
@@ -21,6 +22,18 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val latitude = MutableLiveData<Double>()
     val longitude = MutableLiveData<Double>()
 
+    private val _navigateToReminderList = MutableLiveData<Boolean>()
+    val navigateToReminderList : LiveData<Boolean>
+        get() = _navigateToReminderList
+
+    init {
+        _navigateToReminderList.value =false
+    }
+
+    fun  navigateToReminderList() {
+        _navigateToReminderList.value = false
+    }
+
     /**
      * Clear the live data objects to start fresh next time the view model gets called
      */
@@ -39,6 +52,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     fun validateAndSaveReminder(reminderData: ReminderDataItem) {
         if (validateEnteredData(reminderData)) {
             saveReminder(reminderData)
+            _navigateToReminderList.value = true
         }
     }
 

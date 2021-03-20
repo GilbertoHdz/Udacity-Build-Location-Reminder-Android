@@ -3,6 +3,10 @@ package com.gilbertohdz.todomap.locationreminders.geofence
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.util.Log
+import com.gilbertohdz.todomap.locationreminders.geofence.GeofenceTransitionsJobIntentService.Companion.enqueueWork
+import com.google.android.gms.location.Geofence
+import com.google.android.gms.location.GeofencingEvent
 
 /**
  * Triggered by the Geofence.  Since we can have many Geofences at once, we pull the request
@@ -15,9 +19,22 @@ import android.content.Intent
  */
 
 class GeofenceBroadcastReceiver : BroadcastReceiver() {
+
+    private val TAG = "GeofenceBroadcastReceiver"
+
     override fun onReceive(context: Context, intent: Intent) {
+        // DONE: implement the onReceive method to receive the geofencing events at the background
 
-//TODO: implement the onReceive method to receive the geofencing events at the background
+        val geofenceEvent = GeofencingEvent.fromIntent(intent)
+        if (geofenceEvent.hasError()) {
+            Log.d(TAG, "Error on receive !")
+            return
+        }
 
+        when (geofenceEvent.geofenceTransition) {
+            Geofence.GEOFENCE_TRANSITION_ENTER -> {
+                enqueueWork(context, intent)
+            }
+        }
     }
 }
