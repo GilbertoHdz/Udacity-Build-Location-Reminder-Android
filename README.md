@@ -42,9 +42,9 @@ Explain what each test does and why
 
 ```
 1.androidTest
-        //TODO: Students explain their testing here.
+        Using Espresso Idling resource to test the data binding in the fragment and recycler view
 2. test
-        //TODO: Students explain their testing here.
+        Using Fake data source to mooking value results and FakeLiveData to trigger the value changes
 ```
 
 ## Project Instructions
