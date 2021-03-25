@@ -1,5 +1,6 @@
 package com.gilbertohdz.todomap.locationreminders
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -12,6 +13,7 @@ import com.gilbertohdz.todomap.R
 import com.gilbertohdz.todomap.authentication.AuthenticationActivity
 import com.gilbertohdz.todomap.utils.LocationUtils
 import com.gilbertohdz.todomap.utils.LocationUtils.REQUEST_LOCATION_PERMISSION
+import com.gilbertohdz.todomap.utils.LocationUtils.hasPermission
 import kotlinx.android.synthetic.main.activity_reminders.*
 
 /**

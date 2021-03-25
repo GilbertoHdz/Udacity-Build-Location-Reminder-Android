@@ -39,8 +39,13 @@
     <string name="geofence_not_available">Geofence service is not available now. Go to Settings>Location>Mode and choose High accuracy.</string>
     <string name="geofence_too_many_geofences">Your app has registered too many geofences.</string>
     <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call.</string>
+    <string name="geofence_background_permission">Please give background location permission.</string>
     <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
 
+    <string name="background_location_permission_rationale">The background location permission is needed for enhanced functionality.</string>
+    <string name="background_permission_denied_explanation">Background location permission was denied but needed for enhanced functionality.</string>
+
+    <string name="ok">OK</string>
     <string name="sign_in_cancelled">Sign in canceled</string>
     <string name="no_internet_connection">No internet connection found.</string>
 </resources>

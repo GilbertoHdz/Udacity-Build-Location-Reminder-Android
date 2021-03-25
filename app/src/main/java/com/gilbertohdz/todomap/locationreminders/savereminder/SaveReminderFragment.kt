@@ -1,7 +1,9 @@
 package com.gilbertohdz.todomap.locationreminders.savereminder
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -9,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.gilbertohdz.todomap.R
@@ -17,6 +20,8 @@ import com.gilbertohdz.todomap.base.NavigationCommand
 import com.gilbertohdz.todomap.databinding.FragmentSaveReminderBinding
 import com.gilbertohdz.todomap.locationreminders.geofence.GeofenceHelper
 import com.gilbertohdz.todomap.locationreminders.reminderslist.ReminderDataItem
+import com.gilbertohdz.todomap.utils.LocationUtils.hasPermission
+import com.gilbertohdz.todomap.utils.LocationUtils.requestPermissionWithRationale
 import com.gilbertohdz.todomap.utils.setDisplayHomeAsUpEnabled
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
@@ -25,6 +30,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 import java.util.*
 
@@ -57,7 +63,7 @@ class SaveReminderFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
 
-        geofencingClient = LocationServices.getGeofencingClient(context!!)
+        geofencingClient = LocationServices.getGeofencingClient(requireContext())
         geofenceHelper = GeofenceHelper(requireContext())
 
         binding.selectLocation.setOnClickListener {
@@ -90,12 +96,27 @@ class SaveReminderFragment : BaseFragment() {
                 }
             })
         }
+
+        requestBackgroundLocationPermission()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         // make sure to clear the view model after destroy, as it's a single view model.
         _viewModel.onClear()
+    }
+
+    private fun requestBackgroundLocationPermission() {
+        val permissionApproved = requireContext().hasPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION) ?: return
+
+        if (permissionApproved) {
+            Toast.makeText(requireContext(), "BackgroundLocation Permission granted", Toast.LENGTH_SHORT).show()
+        } else {
+            requestPermissionWithRationale(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE,
+                    backgroundRationalSnackbar)
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -120,12 +141,29 @@ class SaveReminderFragment : BaseFragment() {
                 })
                 .addOnFailureListener(OnFailureListener { e ->
                     val errorMessage: String = geofenceHelper.getErrorString(e)
-                    Toast.makeText(context, "Please give background location permission", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, R.string.geofence_background_permission, Toast.LENGTH_LONG).show()
                     Log.d(TAG, "fail in creating geofence: $errorMessage")
                 })
     }
 
+    private val backgroundRationalSnackbar by lazy {
+        Snackbar.make(
+                binding.constraintLayoutReminder,
+                R.string.background_location_permission_rationale,
+                Snackbar.LENGTH_LONG
+        )
+                .setAction(R.string.ok) {
+                    requestPermissions(
+                            arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+                            REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE
+                    )
+                }
+    }
+
     companion object {
+        private const val REQUEST_FINE_LOCATION_PERMISSIONS_REQUEST_CODE = 34
+        private const val REQUEST_BACKGROUND_LOCATION_PERMISSIONS_REQUEST_CODE = 56
+
         private const val TAG = "SaveReminderFragment"
     }
 }

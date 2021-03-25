@@ -1,14 +1,18 @@
 package com.gilbertohdz.todomap.locationreminders.reminderslist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
+import com.firebase.ui.auth.AuthUI
 import com.gilbertohdz.todomap.R
+import com.gilbertohdz.todomap.authentication.AuthenticationActivity
 import com.gilbertohdz.todomap.base.BaseFragment
 import com.gilbertohdz.todomap.base.NavigationCommand
 import com.gilbertohdz.todomap.databinding.FragmentRemindersBinding
 import com.gilbertohdz.todomap.utils.setDisplayHomeAsUpEnabled
 import com.gilbertohdz.todomap.utils.setTitle
+import com.gilbertohdz.todomap.utils.setup
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReminderListFragment : BaseFragment() {
@@ -64,13 +68,21 @@ class ReminderListFragment : BaseFragment() {
         }
 
         // setup the recycler view using the extension function
-        //binding.remindersRecyclerView.setup(adapter)
+        binding.reminderssRecyclerView.setup(adapter)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.logout -> {
-//                TODO: add the logout implementation
+                AuthUI.getInstance()
+                    .signOut(requireContext())
+                    .addOnCompleteListener {
+
+                        val intent = Intent(requireContext(), AuthenticationActivity::class.java)
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent)
+                    }
             }
         }
         return super.onOptionsItemSelected(item)

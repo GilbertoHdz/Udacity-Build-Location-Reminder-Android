@@ -2,6 +2,7 @@ package com.gilbertohdz.todomap.locationreminders.geofence
 
 import android.content.Context
 import android.content.Intent
+import android.text.TextUtils
 import android.util.Log
 import androidx.core.app.JobIntentService
 import com.gilbertohdz.todomap.locationreminders.data.ReminderDataSource
@@ -15,6 +16,7 @@ import com.google.android.gms.location.GeofencingEvent
 import kotlinx.coroutines.*
 import org.koin.android.ext.android.inject
 import kotlin.coroutines.CoroutineContext
+import org.koin.android.ext.android.get
 
 class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
 
@@ -22,7 +24,7 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
     private var coroutineJob: Job = Job()
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.IO + coroutineJob
-    private lateinit var repository: ReminderDataSource
+    private val repository: ReminderDataSource by inject()
 
     companion object {
         private const val JOB_ID = 573
@@ -59,12 +61,14 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
             }
         }
 
+        if(TextUtils.isEmpty(requestId)) return
+
         //Get the local repository instance
-        val remindersLocalRepository: RemindersLocalRepository by inject()
+        //val remindersLocalRepository: RemindersLocalRepository by inject()
 //        Interaction to the repository has to be through a coroutine scope
         CoroutineScope(coroutineContext).launch(SupervisorJob()) {
             //get the reminder with the request id
-            val result = remindersLocalRepository.getReminder(requestId)
+            val result = repository.getReminder(requestId)
             if (result is Result.Success<ReminderDTO>) {
                 val reminderDTO = result.data
                 //send a notification to the user with the reminder details
