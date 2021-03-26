@@ -89,6 +89,8 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
     fun navigateToAddReminder() = runBlockingTest {
         // Given
         val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        dataBindingIdlingResource.monitorFragment(scenario)
+
         val navController = mock(NavController::class.java)
 
         scenario.onFragment {
@@ -105,7 +107,8 @@ class ReminderListFragmentTest : AutoCloseKoinTest() {
     @Test
     fun errorMessageShown() = runBlockingTest {
         // Given
-        launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        dataBindingIdlingResource.monitorFragment(scenario)
 
         // Then
         onView(withText("No Data")).check(matches(isDisplayed()))
